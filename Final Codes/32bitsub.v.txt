@@ -1,0 +1,26 @@
+module full_subtractor (A, C, Bin, Bout, Diff);
+    output Bin,Diff;
+    input A,C,Bout;
+    wire S,T,U,V;
+    not not1(S,A);
+    xor xor1(Diff,A,C,Bout);
+    
+    and and1(T,S,C);
+    and and2(U,S,Bout);
+    and and3(V,C,Bout);
+    or or1(Bin,T,U,V);
+endmodule
+
+module _32bitsub(a,b,bin,diff);
+    input [31:0]a,b;
+    output [31:0] diff;
+    output bin;
+    wire [31:0]bout;
+    assign bout[0]=1'b0;
+    genvar i;
+    generate for(i=0; i<31 ; i=i+1) begin
+        full_subtractor uut(a[i],b[i],bout[i+1],bout[i],diff[i]);
+    end
+    full_subtractor t (a[31],b[31],bin,bout[31],diff[31]);
+    endgenerate
+endmodule

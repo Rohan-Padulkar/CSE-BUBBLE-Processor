@@ -1,0 +1,59 @@
+`timescale 1ns / 1ps
+
+// `include "three2eight.v"
+
+module decoder3_to_8(
+    input x,
+    input y,
+    input z,
+    output d0,
+    output d1,
+    output d2,
+    output d3,
+    output d4,
+    output d5,
+    output d6,
+    output d7
+    );
+and (d0,xn,yn,zn),(d1,xn,yn,z),(d2,xn,y,zn),(d3,xn,y,z),(d4,x,yn,zn),(d5,x,yn,z),(d6,x,y,zn),(d7,x,y,z);
+not (xn,x),(yn,y),(zn,z);
+endmodule
+
+module decoder3_to_8tb;
+    reg x,y,z;
+    wire d0,d1,d2,d3,d4,d5,d6,d7;
+
+    decoder3_to_8 uut(.x(x),.y(y),.z(z),.d0(d0),.d1(d1),.d2(d2),.d3(d3),.d4(d4),.d5(d5),.d6(d6),.d7(d7));
+    
+    initial 
+        begin
+            $dumpfile("three2eight.vcd");
+            $dumpvars();
+        end
+    
+    initial 
+        begin
+            $dumpfile("three2eighttb.vcd");
+            $dumpvars();
+        end
+
+    initial 
+        begin
+            // Initialize Inputs
+            x = 0;y = 0;z = 0;
+            // Wait 100 ns for global reset to finish
+            #100;
+            // Add stimulus here
+            #100;x = 0;y = 0;z = 1;
+            #100;x = 0;y = 1;z = 0;
+            #100;x = 0;y = 1;z = 1;
+            #100;x = 1;y = 0;z = 0;
+            #100;x = 1;y = 0;z = 1;
+            #100;x = 1;y = 1;z = 0;
+            #100;x = 1;y = 1;z = 1;
+
+        end
+
+    
+endmodule
+

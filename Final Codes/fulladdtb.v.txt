@@ -1,0 +1,22 @@
+`timescale 1ns / 1ps
+
+// `include "D:/Programs/IVERILOG/fulladd.v"
+
+module full_add;
+    reg a,b,cin;
+    wire cout,sum;
+
+    fulladd f1(.a(a), .b(b), .cin(cin), .cout(cout), .sum(sum));
+
+    initial 
+        begin
+            $dumpfile("full_tb.vcd");
+            $dumpvars();
+        end
+    
+    initial begin a=1'b1;  #4; a=1'b0;#10 $stop();end
+    initial begin b=1'b1; forever #2 b=~b;end
+    initial begin cin=1'b1;forever #1 cin=~cin; #10 $stop();end
+
+    initial begin $monitor(" time=%0d A=%b B=%b Cin=%b Sum=%b Cout=%b",$time,a,b,cin,sum,cout);end
+endmodule
